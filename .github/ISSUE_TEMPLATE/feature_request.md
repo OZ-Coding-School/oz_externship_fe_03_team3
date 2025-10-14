@@ -1,9 +1,9 @@
 ---
-name: "✨ Feature Request"
-about: "새로운 기능을 제안해주세요"
-title: ""
-labels: ""
-assignees: ""
+name: '✨ Feature Request'
+about: '새로운 기능을 제안해주세요'
+title: ''
+labels: ''
+assignees: ''
 ---
 
 ## 어떤 기능인가요?
@@ -13,4 +13,4 @@ assignees: ""
 ## 세부 목표
 
 - [ ] (세부 목표를 적어주세요)
-- [ ] 
+- [ ]

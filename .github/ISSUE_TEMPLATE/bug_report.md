@@ -1,9 +1,9 @@
 ---
-name: "🐛 Bug Report"
-about: "버그를 신고해주세요"
-title: ""
-labels: ""
-assignees: ""
+name: '🐛 Bug Report'
+about: '버그를 신고해주세요'
+title: ''
+labels: ''
+assignees: ''
 ---
 
 ## 🐛 어떤 버그인가요?
@@ -19,4 +19,4 @@ assignees: ""
 > 어떻게 수정해야 하나요?
 
 - [ ] (수정 사항을 적어주세요)
-- [ ] 
+- [ ]
