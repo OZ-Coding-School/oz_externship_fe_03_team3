@@ -15,6 +15,7 @@ export default tseslint.config(
       '*.config.js', // 설정 파일들 (vite.config.js 등)
       '*.config.ts', // TypeScript 설정 파일들
       'public', // 정적 자원 폴더
+      '.husky',
     ],
   },
 
