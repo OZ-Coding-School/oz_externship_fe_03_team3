@@ -2,6 +2,7 @@ import {
   GridContainer,
   Vstack,
 } from '../../../components/commonInGeneral/layout'
+import Container from '../../../components/commonInGeneral/layout/_Container'
 import FlexOneContainer from '../../../components/commonInGeneral/layout/_FlexOneContainer'
 import FullScreen from '../../../components/commonInGeneral/layout/_FullScreen'
 
@@ -18,8 +19,13 @@ const BlueLongBox = () => {
 
 const ThepottTestPage = () => {
   return (
-    <Vstack className="w-full bg-rose-200">
+    <Vstack className="w-2xl bg-rose-200">
       <FullScreen className="bg-sky-300" />
+      <div className="h-[500px] w-[1500px] bg-amber-700 p-3">
+        <Container isPadded className="bg-amber-300">
+          asdfasdf
+        </Container>
+      </div>
       <Box />
       <Box />
       <Box />
