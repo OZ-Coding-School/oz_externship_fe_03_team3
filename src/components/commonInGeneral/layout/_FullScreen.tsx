@@ -1,27 +1,10 @@
-import type { DivProps, Style } from '../../packageInterfaces'
-import styles from './_FullScreen.module.css'
+import type { DivProps } from '../../../types'
 
-interface WithFullScreenProps {
-  isCentered?: boolean
-}
-
-const FullScreen = ({
-  isCentered,
-  ...props
-}: DivProps & WithFullScreenProps) => {
-  const { style, className, children, ...rest } = props
-
-  const styleForVar: Style = {}
-  if (isCentered) {
-    styleForVar['--center'] = 'center'
-  }
+const FullScreen = ({ ...props }: DivProps) => {
+  const { className, children, ...rest } = props
 
   return (
-    <div
-      {...rest}
-      style={{ ...styleForVar, ...style }}
-      className={`${className} ${styles.fullScreen}`}
-    >
+    <div {...rest} className={`${className} h-screen w-screen`}>
       {children}
     </div>
   )
