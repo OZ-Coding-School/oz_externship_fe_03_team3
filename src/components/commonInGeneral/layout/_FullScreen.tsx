@@ -4,7 +4,10 @@ const FullScreen = ({ ...props }: DivProps) => {
   const { className, children, ...rest } = props
 
   return (
-    <div {...rest} className={`${className} h-screen w-screen`}>
+    <div
+      {...rest}
+      className={`${className} flex h-screen w-screen flex-col overflow-hidden`}
+    >
       {children}
     </div>
   )
