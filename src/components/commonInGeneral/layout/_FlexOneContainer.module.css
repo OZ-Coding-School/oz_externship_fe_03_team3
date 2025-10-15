@@ -1,5 +1,5 @@
 .flexOne {
   flex: 1;
-  overflow-x: var(--overflow-x, visible);
-  overflow-y: var(--overflow-y, visible);
+  overflow-x: var(--overflow-x);
+  overflow-y: var(--overflow-y);
 }

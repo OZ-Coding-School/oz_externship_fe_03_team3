@@ -1,16 +1,17 @@
-import type { DivProps, Style } from '../../packageInterfaces'
 import styles from './_FlexOneContainer.module.css'
+import type { DivProps, Style } from '../../../types'
 
-interface FlexOneContainer {
+interface WithFlexOneContainer {
   isYScrollable?: boolean
   isXScrollable?: boolean
 }
+
 const FlexOneContainer = ({
   isYScrollable,
   isXScrollable,
   ...props
-}: FlexOneContainer & DivProps) => {
-  const { style, className, children, ...rest } = props
+}: DivProps & WithFlexOneContainer) => {
+  const { className, style, children, ...rest } = props
 
   const flexOneStyle: Style = {}
   flexOneStyle['--overflow-x'] = isXScrollable ? 'scroll' : 'hidden'
