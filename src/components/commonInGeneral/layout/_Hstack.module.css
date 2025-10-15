@@ -1,6 +1,0 @@
-.hstack {
-  display: flex;
-  justify-content: var(--justify, flex-start);
-  align-items: var(--items, stretch);
-  gap: var(--gap, 0);
-}

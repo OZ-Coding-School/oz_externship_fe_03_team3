@@ -1,39 +1,17 @@
-import type {
-  DivProps,
-  StartToEnd,
-  Style,
-  None,
-  Stretch,
-  XsToXl,
-} from '../../packageInterfaces'
-import hstackStyles from './_Hstack.module.css'
+import { gapMap } from '../../../lib/tailwindClassNameMap'
+import type { DivProps, None, XsToXxl } from '../../../types'
 
 interface WithHstackProps {
-  gap?: XsToXl | None
-  justify?: StartToEnd
-  items?: StartToEnd | Stretch
+  gap?: XsToXxl | None
 }
 
-const Hstack = ({
-  gap = 'md',
-  justify = 'flex-start',
-  items = 'stretch',
-  ...props
-}: DivProps & WithHstackProps) => {
-  const { style, className, children } = props
+const Hstack = ({ gap = 'md', ...props }: DivProps & WithHstackProps) => {
+  const { className, children, ...rest } = props
 
-  const defaultStyle: Style = {}
-  defaultStyle['--justify'] = justify ? justify : 'flex-start'
-  defaultStyle['--items'] = items ? items : 'stretch'
-  // defaultStyle["--gap"] = gap === "none" ? 0 : `var(--spacing-${gap})`
-  defaultStyle['--gap'] = gap === 'none' ? 0 : `var(--spacing-md)`
+  const gapResult = gapMap[gap] ?? ''
 
   return (
-    <div
-      {...props}
-      style={{ ...defaultStyle, ...style }}
-      className={`${hstackStyles.hstack} ${className}`}
-    >
+    <div {...rest} className={`${className} ${gapResult} flex gap-3`}>
       {children}
     </div>
   )
