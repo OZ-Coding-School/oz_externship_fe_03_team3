@@ -1,0 +1,7 @@
+.vstack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap, 0);
+  justify-content: var(--justify, flex-start);
+  align-items: var(--items, stretch);
+}
