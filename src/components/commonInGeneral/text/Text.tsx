@@ -1,8 +1,8 @@
 import { convertToTextColor } from '../../../lib/tailwindClassNameMap'
-import type { PProps } from '../../../types'
+import type { Color, PProps } from '../../../types'
 
 interface TextProps {
-  color?: 'mono' // 더 추가될 예정
+  color?: Color // 더 추가될 예정
   isMuted?: boolean
 }
 
