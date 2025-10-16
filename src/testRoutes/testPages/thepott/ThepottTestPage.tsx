@@ -5,6 +5,7 @@ import {
 import Container from '../../../components/commonInGeneral/layout/_Container'
 import FlexOneContainer from '../../../components/commonInGeneral/layout/_FlexOneContainer'
 import FullScreen from '../../../components/commonInGeneral/layout/_FullScreen'
+import Text from '../../../components/commonInGeneral/text/Text'
 
 const Box = () => {
   return <div className="h-[100px] w-[100px] bg-amber-300">뭔가 있음</div>
@@ -23,7 +24,7 @@ const ThepottTestPage = () => {
       <FullScreen className="bg-sky-300" />
       <div className="h-[500px] w-[1500px] bg-amber-700 p-3">
         <Container isPadded className="bg-amber-300">
-          asdfasdf
+          <Text>이건 아주 멋진 거야</Text>
         </Container>
       </div>
       <Box />
