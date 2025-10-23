@@ -11,6 +11,7 @@ import LectureSearchInput from './_LectureSearchInput'
 import useStudyHubStore from '@/store/store'
 import { dummyLectureArray } from './dummyLectureArray'
 import NoSearchResult from '../commonInProject/noSearchResult/NoSearchResult'
+import LectureCategorySelect from './_LectureCategorySelect'
 
 const LectureContent = () => {
   const [isSearching, setIsSearching] = useState(false)
@@ -35,6 +36,7 @@ const LectureContent = () => {
 
       <Vstack className="px-oz-xxl gap-oz-xxl">
         <RoundBox>
+          <LectureCategorySelect />
           <GridContainer className="gap-oz-lg">
             <LectureSearchInput setIsSearching={setIsSearching} />
 
