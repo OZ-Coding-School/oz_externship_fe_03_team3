@@ -42,10 +42,13 @@ const Modal = ({
       <FullScreen
         {...rest}
         isCentered
-        className={`${className} fixed`}
+        className={`${className} fixed top-0 left-0`}
         onClick={onClose}
       >
-        <FullScreen style={{ zIndex }} className="fixed bg-black opacity-50" />
+        <FullScreen
+          style={{ zIndex }}
+          className="fixed top-0 left-0 bg-black opacity-50"
+        />
         <RoundBox
           {...rest}
           style={{ ...style, zIndex: zIndex + 1 }}
