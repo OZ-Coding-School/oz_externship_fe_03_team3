@@ -2,9 +2,16 @@ import { Vstack } from '@/components/commonInGeneral/layout'
 import ChatBox from './ChatBox'
 import ChattingRoomSkeleton from '../skeleton/ChattingRoomSkeleton'
 import Skeleton from '@/components/commonInGeneral/skeleton/Skeleton'
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react'
 import useStudyHubStore from '@/store/store'
 import { useVirtualizer } from '@tanstack/react-virtual'
+import useDebounce from '@/hooks/useDebounce'
 
 interface ChatArray {
   isPending: boolean
@@ -21,7 +28,16 @@ const ChatDisplay = ({
   const containerRef = useRef<HTMLDivElement>(null)
   const overflow = isPending ? 'overflow-hidden' : 'overflow-y-scroll'
   const chatMessageArray = useStudyHubStore((state) => state.chatMessageArray)
-  const [init, setInit] = useState(true) // 초기 스크롤 세팅할 플래그
+  const chatScrollBottom = useStudyHubStore((state) => state.chatScrollBottom)
+  const setChatScrollBottom = useStudyHubStore(
+    (state) => state.setChatScrollBottom
+  )
+  const chatInit = useStudyHubStore((state) => state.chatInit) // 초기 스크롤 세팅할 플래그
+  const setChatInit = useStudyHubStore((state) => state.setChatInit)
+
+  const [bottom, setBottom] = useState(0)
+  const [debounceValue] = useDebounce(bottom, 50)
+
   const previndex = useRef(0)
 
   // 윈도잉(가상화 리스트)
@@ -32,44 +48,105 @@ const ChatDisplay = ({
     overscan: 10, // 화면 바깥에 미리 렌더링 할 메시지 수
   })
 
+  const handleScroll = () => {
+    const el = rowVirtualizer.scrollElement
+    if (!el || isFetchingNextPage || isPending) {
+      return
+    }
+    // const scrollBottom = rowVirtualizer.getTotalSize() - ((rowVirtualizer.scrollOffset|| 0)+ (rowVirtualizer.scrollElement?.clientHeight ||0))
+    setBottom(el.scrollHeight - (el.scrollTop + el.clientHeight))
+  }
+  const onDebounce = useCallback(
+    (result: number) => {
+      if (result > 50) {
+        setChatScrollBottom(false)
+      } else {
+        setChatScrollBottom(true)
+      }
+    },
+    [setChatScrollBottom]
+  )
+
+  useEffect(() => {
+    onDebounce(debounceValue)
+  }, [debounceValue, onDebounce])
+
   // 처음 들어오면 아래로 이동하는 useEffect
   // Todo 추후에 안읽은 메시지로 이동 하도록 변경
   useLayoutEffect(() => {
     if (!containerRef) {
       return
     }
-    if (containerRef.current && init && !isPending) {
+    if (chatMessageArray.length === 0) {
+      return
+    }
+    if (containerRef.current && chatInit && !isPending) {
       rowVirtualizer.scrollToIndex(chatMessageArray.length - 1, {
         align: 'end',
       })
-      setInit(false)
+      setChatInit(false)
       previndex.current = 0
     }
-  }, [rowVirtualizer, chatMessageArray.length, init, isPending])
+  }, [
+    rowVirtualizer,
+    chatMessageArray.length,
+    chatInit,
+    isPending,
+    setChatInit,
+  ])
 
+  // 메시지 추가 할때 이동
   useEffect(() => {
     if (
-      !init &&
+      !chatInit &&
       !isFetchingNextPage &&
       chatMessageArray.length > previndex.current
     ) {
-      rowVirtualizer.scrollToIndex(
-        chatMessageArray.length - previndex.current - 1,
-        {
-          align: 'end',
-        }
-      )
-      previndex.current = chatMessageArray.length
+      // 무한 스크롤 할때
+      if (previndex.current !== chatMessageArray.length) {
+        rowVirtualizer.scrollToIndex(
+          chatMessageArray.length - previndex.current - 1,
+          {
+            align: 'end',
+          }
+        )
+        previndex.current = chatMessageArray.length
+      }
+      // 탐색 중에 채팅이 올때
+      // else{
+      //   rowVirtualizer.scrollToIndex(
+      //     chatMessageArray.length - previndex.current - 1,
+      //   )
+      // }
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFetchingNextPage, chatMessageArray.length, rowVirtualizer])
+  }, [isFetchingNextPage, rowVirtualizer])
+
+  // 채팅
+  useEffect(() => {
+    if (!chatInit && chatMessageArray.length > previndex.current) {
+      // 바닥에 있을때 === 채팅 할때
+      if (chatScrollBottom) {
+        rowVirtualizer.scrollToIndex(chatMessageArray.length - 1, {
+          align: 'end',
+          behavior: 'smooth',
+        })
+        // previndex.current = chatMessageArray.length
+      }
+
+      // previndex.current = chatMessageArray.length
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chatScrollBottom, chatMessageArray])
 
   return (
     <Vstack
       padding="md"
       className={`mx-[-24px] h-full ${overflow}`}
       ref={containerRef}
+      onScroll={handleScroll}
     >
       <div
         className={`w-full] relative`}

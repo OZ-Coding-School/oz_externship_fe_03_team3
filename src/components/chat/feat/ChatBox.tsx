@@ -1,5 +1,6 @@
 import { Vstack } from '@/components/commonInGeneral/layout'
 import RoundBox from '@/components/commonInGeneral/roundBox/RoundBox'
+import useStudyHubStore from '@/store/store'
 import type { ChatMessage } from '@/types/_chat'
 
 interface ChatBoxInterface {
@@ -23,14 +24,20 @@ const chatBoxStyle = (isOwner: boolean) => {
 }
 
 // 사용자 임시 아이디 값
-const SENDER_NICKNAME = '스터디장_김'
+// const SENDER_NICKNAME = '스터디장_김'
 
 const ChatBox = ({ chat, measure }: ChatBoxInterface) => {
-  const date = new Date(chat.created_at)
-  const hour = String(date.getUTCHours()).padStart(2, '0')
-  const munite = String(date.getUTCMinutes()).padStart(2, '0')
+  const me = useStudyHubStore((state) => state.me) // 닉네임 구분
 
-  const isOwner = SENDER_NICKNAME === chat?.sender.nickname
+  const date = new Date(chat.created_at)
+  const time = date.toLocaleTimeString('ko-KR', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  })
+  // const isOwner = SENDER_NICKNAME === chat?.sender.nickname
+  const isOwner = me?.nickname === chat?.sender.nickname // 실제 api 연결시 사용
+
   const boxStyle = chatBoxStyle(isOwner)
 
   return (
@@ -42,11 +49,11 @@ const ChatBox = ({ chat, measure }: ChatBoxInterface) => {
         padding="sm"
         radius="lg"
         isBordered={false}
-        className={`min-h-9 max-w-[220px] ${boxStyle.box} px-3`}
+        className={`min-h-9 max-w-[220px] ${boxStyle.box} px-3 wrap-break-word`}
       >
         <span className={`text-sm ${boxStyle.text}`}>{chat.content}</span>
       </RoundBox>
-      <span className="text-xs text-gray-500">{`${hour}:${munite}`}</span>
+      <span className="text-xs text-gray-500">{time}</span>
     </Vstack>
   )
 }

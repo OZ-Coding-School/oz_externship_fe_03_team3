@@ -127,14 +127,8 @@ export interface RecruitDetailLecture {
   price: number
 }
 
-export interface RecruitAuthor {
-  id: number
-  nickname: string
-  profile_img_url: string
-}
-
 export interface RecruitDetail {
-  author: RecruitAuthor
+  author_nickname: string
   study_group_name: string // NOTE: study_name swag 문서, 명세서에 둘 다 빠져있음, 요청 드림
   uuid: string // NOTE: id 삭제, uuid만 사용
   title: string
@@ -144,10 +138,10 @@ export interface RecruitDetail {
   expected_headcount: number
   estimated_fee: number
   lectures: RecruitDetailLecture[] // NOTE: api 명세서에 있는데도 swag에서 빠짐, 요청 드림
-  tags: string[]
+  tags: RecruitTag[]
   close_at: string
   created_at: string
-  view_count: number
+  views_count: number
   bookmark_count: number
   is_bookmarked: boolean
 }

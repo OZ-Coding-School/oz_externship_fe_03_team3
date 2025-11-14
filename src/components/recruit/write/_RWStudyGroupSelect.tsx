@@ -2,7 +2,7 @@ import Labeled from '@/components/commonInGeneral/inputFamily/labeled/Labeled'
 import { Vstack } from '@/components/commonInGeneral/layout'
 import Select from '@/components/commonInGeneral/select/Select'
 import useStudyHubStore from '@/store/store'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Controller } from 'react-hook-form'
 import type { RecruitWriteChildrenProps, StudyGroup } from '@/types'
 import RWStudyGroupInfo from './_RWStudyGroupInfo'
@@ -32,13 +32,28 @@ const RWStudyGroupSelect = ({ errors, control }: RecruitWriteChildrenProps) => {
     setSelectedStudyGroup(result)
   }
 
+  useEffect(() => {
+    if (!editingRecruit || !data) {
+      return
+    }
+
+    const defaultStudyGroup = data.find(
+      (studyGroup) => studyGroup.name === editingRecruit.study_group_name
+    )
+    if (!defaultStudyGroup) {
+      return
+    }
+
+    setSelectedStudyGroup(defaultStudyGroup)
+  }, [editingRecruit, data])
+
   return (
     <Vstack>
-      <Labeled isRequired isInDanger={Boolean(errors.study_group_id)}>
+      <Labeled isRequired isInDanger={Boolean(errors.study_group)}>
         <Labeled.Header>대상 스터디 그룹</Labeled.Header>
         <Controller
           control={control}
-          name="study_group_id"
+          name="study_group"
           render={({ field: { onChange } }) => (
             <Select
               defaultChildren={editingRecruit?.study_group_name}
@@ -62,7 +77,7 @@ const RWStudyGroupSelect = ({ errors, control }: RecruitWriteChildrenProps) => {
             </Select>
           )}
         />
-        <Labeled.Footer>{errors?.study_group_id?.message}</Labeled.Footer>
+        <Labeled.Footer>{errors?.study_group?.message}</Labeled.Footer>
       </Labeled>
       {selectedStudyGroup && (
         <RWStudyGroupInfo studyGroup={selectedStudyGroup} />

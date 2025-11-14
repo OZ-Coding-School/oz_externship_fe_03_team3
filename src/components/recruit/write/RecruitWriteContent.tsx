@@ -24,6 +24,7 @@ import useRecruitWrite from './_useRecruitWrite'
 import RWSubHeader from './_RWSubHeader'
 import RWMarkdownEditor from './_RWMarkdownEditor'
 import useRecruitWriteMutation from '@/hooks/recruitWrite/useRecruitWriteMutation'
+import { trimObject } from '@/utils/trim'
 
 interface RecruitWriteContetProps {
   isEditing?: boolean
@@ -49,9 +50,11 @@ const RecruitWriteContent = ({
     useRecruitWrite(isEditing)
 
   const onSubmit = (data: FieldValues) => {
-    const formData = new FormData()
     const { attachments, ...rest } = data
-    const restEntryArray = Object.entries(rest)
+    const trimmedRest = trimObject(rest)
+
+    const formData = new FormData()
+    const restEntryArray = Object.entries(trimmedRest)
     restEntryArray.forEach((entry) => formData.append(...entry))
     attachments.forEach((file: File) => formData.append('attachments', file))
 
@@ -123,7 +126,7 @@ const RecruitWriteContent = ({
                   status={isPending ? 'pending' : 'enabled'}
                 >
                   <Send size={16} />
-                  공고 등록하기
+                  {isEditing ? '공고 수정하기' : '공고 등록하기'}
                 </Button>
               </Hstack>
             </Vstack>

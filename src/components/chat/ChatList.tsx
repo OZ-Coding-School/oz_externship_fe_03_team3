@@ -6,6 +6,7 @@ import ChatListSkeleton from './skeleton/ChatListSkeleton'
 // import useOneWayInfinityScroll from '@/hooks/useOneWayInfinityScroll'
 // import ChatListSkeletonCard from './skeleton/ChatListSkeletonCard'
 import { useChatRoomList } from '@/hooks/chat/useChat'
+import type { ChatRoomData } from '@/types/_chat'
 // import NoMoreChatList from './feat/NoMoreChatList'
 
 // 채팅 목록
@@ -15,6 +16,7 @@ const ChatList = () => {
   const unreadCounter = useStudyHubStore((state) => state.unReadCounter) //안읽은 메시지
   const chatRoomArray = useStudyHubStore((state) => state.chatRoomArray)
   const setChatRoomArray = useStudyHubStore((state) => state.setChatRoomArray)
+  const setUnReadCounter = useStudyHubStore((state) => state.setUnReadCounter)
 
   const { data, isPending, isError, error } = useChatRoomList()
 
@@ -28,23 +30,29 @@ const ChatList = () => {
   // })
 
   useEffect(() => {
-    // if (data?.pages && !isFetchingNextPage) {
-    //   const allMessage =
-    //     data.flatMap((res) => res.data?.messages || []) || []
-    //   setChatRoomArray(allMessage)
+    // 더미 데이터 익스프레스
+    // if (data?.data && Array.isArray(data?.data)) {
+    //   setChatRoomArray(data.data)
+    //   const count = data?.data?.reduce((acc: number, cur: ChatRoomData) => {
+    //     return acc + cur.unread_message_count
+    //   }, 0)
+    //   setUnReadCounter(count)
     // }
-    if (data?.data) {
-      setChatRoomArray(data.data)
+
+    //실제 api
+    if (data && Array.isArray(data)) {
+      setChatRoomArray(data)
+      const count = data.reduce((acc: number, cur: ChatRoomData) => {
+        return acc + cur.unread_message_count
+      }, 0)
+      setUnReadCounter(count)
     } else {
       setChatRoomArray([])
     }
-  }, [data, setChatRoomArray])
+  }, [data, setChatRoomArray, setUnReadCounter])
 
-  // 임시 에러 처리
-  if (isError) {
-    return <>{error} 임시</>
-  }
   const overflow = isPending ? 'overflow-hidden' : 'overflow-y-scroll'
+
   return (
     <ChattingLayout>
       <ChattingLayout.Header>
@@ -59,6 +67,7 @@ const ChatList = () => {
         {isPending && <ChatListSkeleton />}
         {!isPending &&
           chatRoomArray.map((el) => <ChatListCard key={el.uuid} room={el} />)}
+        {isError && <p>{error.message} 에러 발생</p>}
         {/* {!hasNextPage && <NoMoreChatList />} */}
         {/* 무한 스크롤 훅이 감지하는 위치  */}
         {/* <div ref={LoadingRef} className="h-0.5 w-full shrink-0"></div> */}

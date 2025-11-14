@@ -52,7 +52,6 @@ const RecruitCard = ({
   const navigate = useNavigate()
 
   const [confirmOpen, setConfirmOpen] = useState(false)
-  const [bookmarked, setBookmarked] = useState<boolean>(is_bookmarked)
 
   const goDetail = () => navigate(`/recruit/${uuid}`)
 
@@ -87,14 +86,6 @@ const RecruitCard = ({
 
   const cancelDelete = () => {
     setConfirmOpen(false)
-  }
-
-  const handleBookmark = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation()
-    // const payload = { action: 'toggle' }
-    // console.log(JSON.stringify(payload, null, 2))
-
-    setBookmarked((on) => !on)
   }
 
   return (
@@ -150,11 +141,10 @@ const RecruitCard = ({
                   type="button"
                   aria-label="북마크"
                   className="bookmarkCount inline-flex items-center gap-1"
-                  onClick={handleBookmark}
                 >
                   <Bookmark
-                    className={`size-4 cursor-pointer transition hover:text-amber-400 ${bookmarked ? 'text-amber-400' : 'text-gray-500'}`}
-                    fill={bookmarked ? 'currentColor' : 'none'}
+                    className={`size-4 transition ${is_bookmarked ? 'text-amber-400' : 'text-gray-500'}`}
+                    fill={is_bookmarked ? 'currentColor' : 'none'}
                     stroke="currentColor"
                   />
                   {bookmark_count}
