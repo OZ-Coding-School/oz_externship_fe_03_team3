@@ -1,5 +1,4 @@
 import { lazy } from 'react'
-import { dummyApplicantDetail } from './testPages/hyejeong/dummy/dummyApplicantDetail'
 import { dummyApplicantArray } from './testPages/hyejeong/dummy/dummyApplicantList'
 
 // 테스트 라우트에서도 코드 스플리팅을 하려고 합니다!
