@@ -23,6 +23,7 @@ export type RecruitCardProps = {
   isMine?: boolean
   cardClassName?: string
   imageClassName?: string
+  onManageClick?: (recruit: Recruit) => void // ★ 추가
   onDeleteSuccess?: (title: string) => void
   onDeleteError?: (title: string) => void
 }
@@ -32,6 +33,7 @@ const RecruitCard = ({
   isMine = false,
   cardClassName = 'cursor-pointer hover:bg-gray-50 transition',
   imageClassName = 'h-27 w-35',
+  onManageClick, // ★ 추가
   onDeleteSuccess,
   onDeleteError,
 }: RecruitCardProps) => {
@@ -49,7 +51,7 @@ const RecruitCard = ({
   } = recruit
 
   const navigate = useNavigate()
-  const [manageOpen, setManageOpen] = useState(false)
+
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [bookmarked, setBookmarked] = useState<boolean>(is_bookmarked)
 
@@ -256,7 +258,7 @@ const RecruitCard = ({
                     className="gap-2 px-6 py-2 text-sm"
                     onClick={(e) => {
                       e.stopPropagation()
-                      setManageOpen(true)
+                      onManageClick?.(recruit) // ★ 수정
                     }}
                   >
                     <FileText className="size-4" />
@@ -269,12 +271,6 @@ const RecruitCard = ({
           </Vstack>
         </Hstack>
       </RoundBox>
-
-      <ManageModal
-        isOn={manageOpen}
-        onClose={setManageOpen}
-        recruit={recruit}
-      />
 
       <ConfirmationModal isOn={confirmOpen} onClose={cancelDelete}>
         <ConfirmationModal.Title>{`'${title}' 을(를) 삭제하시겠습니까?`}</ConfirmationModal.Title>
