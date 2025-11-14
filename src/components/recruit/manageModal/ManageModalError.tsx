@@ -18,7 +18,7 @@ const ManageModalError = ({ isOn, onClose }: ManageDetailErrorProps) => {
           <h2 className="text-lg font-semibold">지원현황관리</h2>
         </Vstack>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className="h-[492px]">
         <UnknwonErrorContent />
       </Modal.Body>
     </Modal>

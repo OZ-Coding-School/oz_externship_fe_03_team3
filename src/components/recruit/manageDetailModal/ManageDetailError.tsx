@@ -12,7 +12,7 @@ const ManageDetailError = ({ isOn, onClose }: ManageDetailErrorProps) => {
       <Modal.Header>
         <h2 className="text-lg font-semibold">지원자 상세 정보</h2>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className="h-[972px]">
         <UnknwonErrorContent />
       </Modal.Body>
     </Modal>
