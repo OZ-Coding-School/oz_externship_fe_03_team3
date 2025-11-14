@@ -1,0 +1,26 @@
+NODE_ENV="development"
+
+VITE_API_BASE_URL="https://api.ozcoding.site/api/v1"
+# VITE_API_BASE_URL="http://localhost:3000"
+
+VITE_SOCEKT_BASE_URL="wss://api.ozcoding.site/ws/chat"
+VITE_SOCEKT_BASE_URL_FOR_DEV="http://localhost:3000"
+
+
+# 익스프레스 서버를 쓰더라도 헤더의 로그인 버튼을 누를 수 있게 하는 용도
+# 배포 전 삭제할 예정입니다
+VITE_ORIGINAL_BASE_URL_FOR_DEV="https://api.ozcoding.site/api/v1"
+
+# 다른 프론트엔드 팀이 배포를 하면 해당 주소 연결
+VITE_LANDING_PAGE_URL="https://account.ozcoding.site"
+VITE_LOGIN_PAGE_URL="https://account.ozcoding.site/login"
+VITE_SIGNUP_PAGE_URL="https://account.ozcoding.site/signup"
+VITE_MYPAGE_PAGE_URL="https://study.ozcoding.site/mypage"
+VITE_STUDY_PAGE_URL="https://study.ozcoding.site"
+
+# 로그인
+VITE_LOGIN_ID="admin@ozcoding.com"
+VITE_LOGIN_PASSWORD="ozcoding1030@@"
+
+# 클립보드에 사용할 우리 도메인
+VITE_OUR_DOMAIN="https://learn.ozcoding.site"
