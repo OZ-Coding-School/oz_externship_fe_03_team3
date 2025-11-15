@@ -1,5 +1,4 @@
 import ChattingLayout from '@/components/layout/chattingRoom/ChattingLayout'
-import useStudyHubStore from '@/store/store'
 import { ArrowLeft } from 'lucide-react'
 import { Hstack, Vstack } from '../commonInGeneral/layout'
 import ChatUserStatus from './feat/ChatUserStatus'
@@ -10,12 +9,11 @@ import Skeleton from '../commonInGeneral/skeleton/Skeleton'
 import useOneWayInfinityScroll from '@/hooks/useOneWayInfinityScroll'
 import { useChatRoomMessage } from '@/hooks/chat/useChat'
 import { useEffect, useRef } from 'react'
-import type { ChatMessage } from '@/types/_chat'
+import useChatStore from '@/store/chat/chatStore'
 
 // 현재 온라인 유저 명수 표기
 const OnlineUser = ({ isPending }: { isPending: boolean }) => {
-  const chatOnline = useStudyHubStore((state) => state.chatOnline)
-
+  const chatOnline = useChatStore((state) => state.chatOnline)
   if (isPending && chatOnline !== null) {
     return <Skeleton widthInPixel={162} heightInPixel={14} />
   }
@@ -26,17 +24,15 @@ const OnlineUser = ({ isPending }: { isPending: boolean }) => {
 }
 
 const ChattingRoom = () => {
-  const chatState = useStudyHubStore((state) => state.chatState)
-  const openChatList = useStudyHubStore((state) => state.openChatList)
-  const setChatMessageArray = useStudyHubStore(
-    (state) => state.setChatMessageArray
-  )
-  const chatMessageArray = useStudyHubStore((state) => state.chatMessageArray)
-  const chatInit = useStudyHubStore((state) => state.chatInit)
+  const chatState = useChatStore((state) => state.chatState)
+  const openChatList = useChatStore((state) => state.openChatList)
+  const setChatMessageArray = useChatStore((state) => state.setChatMessageArray)
+  // const chatMessageArray = useChatStore((state) => state.chatMessageArray)
+  const chatInit = useChatStore((state) => state.chatInit)
 
-  const page = useStudyHubStore((state) => state.page)
-  const setPage = useStudyHubStore((state) => state.setPage)
-  const chatOnline = useStudyHubStore((state) => state.chatOnline)
+  // const page = useChatStore((state) => state.page)
+  // const setPage = useChatStore((state) => state.setPage)
+  const chatOnline = useChatStore((state) => state.chatOnline)
 
   const {
     data,
@@ -51,19 +47,19 @@ const ChattingRoom = () => {
   const LoadingRef = useRef<HTMLDivElement | null>(null)
   useOneWayInfinityScroll(LoadingRef, () => {
     // 스크롤이 타겟에 들어왔을때 (훅에서는 100% 보일때로 설정해둠)
-
     // 로딩중일때, 다음 페이지가 없으면 는 무한 스크롤 시작 안함
+
     if (hasNextPage && !isFetchingNextPage! && !chatInit) {
       fetchNextPage()
     }
   })
 
   // 데이터 저장, 정렬
-  const sortMessage = (message: ChatMessage[]) => {
-    return message.sort(
-      (a, b) => Date.parse(a.created_at) - Date.parse(b.created_at)
-    )
-  }
+  // const sortMessage = (message: ChatMessage[]) => {
+  //   return message.sort(
+  //     (a, b) => Date.parse(a.created_at) - Date.parse(b.created_at)
+  //   )
+  // }
 
   // 메시지 정렬, 메시지 배열 초기화
   useEffect(() => {
@@ -75,31 +71,32 @@ const ChattingRoom = () => {
       if (!messageArray) {
         return
       }
+      const allMessage = [...messageArray].flatMap((res) => res || []) || []
+      setChatMessageArray(allMessage)
+
       // 초기화
-      if (page === 0) {
-        if (data.pageParams.length === 0) {
-          const allMessage = [...messageArray].flatMap((res) => res || []) || []
-          const sortMessaged = sortMessage(allMessage)
-          setChatMessageArray(sortMessaged)
-        } else {
-          const allMessage =
-            data?.pages.flatMap((res) => res.results || []) || []
-          const sortMessaged = sortMessage(allMessage)
-          setChatMessageArray(sortMessaged)
-        }
-      } else {
-        const allMessage =
-          [...chatMessageArray, ...messageArray].flatMap((res) => res || []) ||
-          []
-        const sortMessaged = sortMessage(allMessage)
+      // if (page === 0) {
+      //   if (data.pageParams.length === 0) {
+      //     const allMessage = [...messageArray].flatMap((res) => res || []) || []
+      //     const sortMessaged = sortMessage(allMessage)
+      //     setChatMessageArray(sortMessaged)
+      //   } else {
+      //     const allMessage =
+      //       data?.pages.flatMap((res) => res.results || []) || []
+      //     const sortMessaged = sortMessage(allMessage)
+      //     setChatMessageArray(sortMessaged)
+      //   }
+      // } else {
+      //   const allMessage =
+      //     [...chatMessageArray, ...messageArray].flatMap((res) => res || []) ||
+      //     []
+      //   const sortMessaged = sortMessage(allMessage)
 
-        setChatMessageArray(sortMessaged)
-      }
+      //   setChatMessageArray(sortMessaged)
+      // }
 
-      setPage(data.pageParams.length)
+      // setPage(data.pageParams.length)
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, isFetchingNextPage, setChatMessageArray])
 
   if (chatState.status !== 'chatRoom') {
