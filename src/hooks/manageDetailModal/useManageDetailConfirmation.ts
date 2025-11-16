@@ -51,13 +51,8 @@ const useManageDetailConfirmation = ({
     })
   }
 
-  // 승인 확정
-  const handleConfirmApprove = async () => {
-    setModalKeyArray(['manage'])
-  }
-
-  // 거절 확정
-  const handleConfirmReject = async () => {
+  // 확인 버튼 클릭
+  const handleConfirm = async () => {
     setModalKeyArray(['manage'])
   }
 
@@ -105,7 +100,7 @@ const useManageDetailConfirmation = ({
         {
           text: '확인',
           color: 'mono',
-          onClick: handleConfirmApprove,
+          onClick: handleConfirm,
         },
       ],
     },
@@ -115,14 +110,23 @@ const useManageDetailConfirmation = ({
         {
           text: '확인',
           color: 'mono',
-          onClick: handleConfirmReject,
+          onClick: handleConfirm,
+        },
+      ],
+    },
+    errorMessage: {
+      title: '요청 처리 중 오류가 발생했습니다.',
+      buttons: [
+        {
+          text: '확인',
+          color: 'mono',
+          onClick: handleConfirm,
         },
       ],
     },
   }
 
   const currentModalKey = modalKeyArray[modalKeyArray.length - 1]
-
   const currentConfig = confirmationConfig[currentModalKey]
 
   return { isPending, currentConfig, handleClose }
